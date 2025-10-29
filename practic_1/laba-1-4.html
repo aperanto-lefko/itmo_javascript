@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>laba-1-4</title>
+</head>
+<body>
+    <h2>Создание и использование объектов</h2>
+
+    <script>
+       
+        class NewClass {
+         
+            constructor(title, url) {
+                this.title = title;
+                this.url = url;
+            }
+
+           
+            show() {
+               
+                document.write("<p>Title: " + this.title + ", URL: " + this.url + "</p>");
+            }
+        }
+
+       
+        var obj1 = new NewClass("Google", "https://www.google.com");
+        obj1.show();
+
+        var obj2 = new NewClass("Пример", "https://example.com");
+        obj2.show();
+
+        var obj3 = new NewClass("Мой проект", "https://myproject.org");
+        obj3.show();
+    </script>
+</body>
+</html>

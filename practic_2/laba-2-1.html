@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>laba-2-1</title>
+    <style>
+        #myImage {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 300px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>Изменение размера изображения</h2>
+    
+  
+    <img src="tiger.png" 
+         alt="изображение" 
+         id="myImage">
+
+    <script>
+        
+        var image = document.getElementById('myImage');
+        var isEnlarged = false; 
+        
+        image.addEventListener('click', function() {
+            if (!isEnlarged) {
+                //размер в 2 раза
+                this.style.transform = 'scale(2)';
+                isEnlarged = true;
+            } else {
+                // исходный размер
+                this.style.transform = 'scale(1)';
+                isEnlarged = false;
+            }
+        });
+    </script>
+</body>
+</html>

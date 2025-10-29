@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>laba-2-4</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+        input {
+            padding: 5px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Регистрация</h2>
+    
+   
+    <form id="registrationForm" method="POST" action="#" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login">
+            <div id="loginError" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password">
+            <div id="passwordError" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirmPassword">Проверка пароля:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword">
+            <div id="confirmPasswordError" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="text" id="email" name="email">
+            <div id="emailError" class="error"></div>
+        </div>
+        
+      
+        <div class="form-group">
+            <input type="submit" value="Отправить">
+        </div>
+    </form>
+
+    <script>
+        function validateForm() {
+            
+            var login = document.getElementById('login').value;
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+            var email = document.getElementById('email').value;
+            
+           
+            clearErrors();
+            
+            var isValid = true;
+            
+           
+            if (login === '') {
+                showError('loginError', 'Поле "Логин" обязательно для заполнения');
+                isValid = false;
+            }
+            
+            if (password === '') {
+                showError('passwordError', 'Поле "Пароль" обязательно для заполнения');
+                isValid = false;
+            }
+            
+            if (confirmPassword === '') {
+                showError('confirmPasswordError', 'Поле "Проверка пароля" обязательно для заполнения');
+                isValid = false;
+            }
+            
+            if (email === '') {
+                showError('emailError', 'Поле "E-mail" обязательно для заполнения');
+                isValid = false;
+            }
+            
+          
+            if (!isValid) {
+                return false;
+            }
+            
+            
+            if (password.length < 6 || password.length > 12) {
+                showError('passwordError', 'Пароль должен содержать от 6 до 12 символов');
+                isValid = false;
+            }
+            
+           
+            if (password !== confirmPassword) {
+                showError('confirmPasswordError', 'Пароли не совпадают');
+                isValid = false;
+            }
+            
+            
+            if (email.indexOf('@') === -1) {
+                showError('emailError', 'E-mail должен содержать символ @');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                alert('Форма успешно проверена! Данные можно отправлять на сервер.');
+                
+                // document.getElementById('registrationForm').submit();
+            }
+            
+            return isValid;
+        }
+        
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+        
+        function clearErrors() {
+            var errorElements = document.getElementsByClassName('error');
+            for (var i = 0; i < errorElements.length; i++) {
+                errorElements[i].textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>laba-2-3</title>
+</head>
+<body>
+    <h2>Работа с окнами в JavaScript</h2>
+    
+  
+    <a href="#" onclick="openNewWindow(); return false;">Новое окно</a>
+
+    <script>
+        function openNewWindow() {
+           
+            var windowFeatures = [
+                'width=300',          
+                'height=400',         
+                'menubar=yes',        
+                'toolbar=yes',        
+                'location=yes',       
+                'personalbar=yes',    
+                'status=yes',         
+                'resizable=yes'       
+            ].join(',');
+            
+          
+            var newWindow = window.open('', 'newWindow', windowFeatures);
+            
+            
+            if (newWindow) {
+                newWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Новое окно</title>
+                    </head>
+                    <body>
+                        <h2>Это новое окно</h2>
+                        <p>Размер: 300x400 пикселей</p>
+                        <p>Параметры окна:</p>
+                        <ul>
+                            <li>Меню </li>
+                            <li>Панель навигации</li>
+                            <li>Адресная строка</li>
+                            <li>Закладки</li>
+                            <li>Строка состояния</li>
+                            <li>Изменение размеров</li>
+                        </ul>
+                        <button onclick="window.close()">Закрыть окно</button>
+                    </body>
+                    </html>
+                `);
+                newWindow.document.close();
+            } else {
+                alert('Браузер заблокировал открытие нового окна. Разрешите всплывающие окна для этого сайта.');
+            }
+        }
+    </script>
+</body>
+</html>

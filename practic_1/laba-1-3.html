@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>laba-1-3</title>
+</head>
+<body>
+    <h2>слово "день" в зависимости от числа</h2>
+
+    <script>
+       
+        function getDayWord(n) {
+           
+            var lastDigit = n % 10;
+            var lastTwoDigits = n % 100;
+            
+          
+            if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+                return 'дней';
+            }
+            
+           
+            if (lastDigit === 1) {
+                return 'день';
+            }
+            
+          
+            if (lastDigit >= 2 && lastDigit <= 4) {
+                return 'дня';
+            }
+            
+          
+            return 'дней';
+        }
+
+      
+        var numbers = [14, 3, 1, 5, 21, 25, 11, 12];
+        
+        for (var i = 0; i < numbers.length; i++) {
+            var num = numbers[i];
+            var dayWord = getDayWord(num);
+            var message = "До конца вашей учебы остается " + num + " " + dayWord + ".";
+            document.write("<p>" + message + "</p>");
+        }
+    </script>
+</body>
+</html>

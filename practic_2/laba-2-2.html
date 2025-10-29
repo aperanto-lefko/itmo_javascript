@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>laba-2-2</title>
+    <style>
+        #change {
+            color: black;
+            font-size: 16px;
+            text-decoration: none;
+            font-weight: normal;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <h2>Управление CSS из JavaScript</h2>
+    
+    <p id="change">Текст</p>
+   
+    <a href="#" onmouseover="ChangeStyle()">Наведи на меня курсор</a>
+
+    <script>
+      
+        function ChangeStyle() {
+            var element = document.getElementById('change');
+            
+       
+            element.style.color = 'red';
+            element.style.fontSize = '24px';
+            element.style.textDecoration = 'underline';
+            element.style.fontWeight = 'bold';
+        }
+    </script>
+</body>
+</html>

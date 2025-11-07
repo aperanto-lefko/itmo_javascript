@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #dbe6f6, #c5796d);
+    margin: 0;
+  }
+  
+  header {
+    background-color: #004b8d;
+    color: white;
+    padding: 1em;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);  
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s;               
+  }
+  
+  nav a:hover {
+    transform: scale(1.2);                    
+  }
+  
+  article {
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;                      
+    width: 80%;
+  }

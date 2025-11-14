@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Телефонная книжка (sessionStorage)</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 20px auto; padding: 20px; }
+        .contact { border: 1px solid #ccc; padding: 10px; margin: 5px 0; }
+        .info { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+            
+            function init() {
+                const nameInput = document.getElementById('name');
+                const phoneInput = document.getElementById('phone');
+                const contactsDiv = document.getElementById('contacts');
+                
+                if (!nameInput || !phoneInput || !contactsDiv) return;
+                
+               
+                function loadContacts() {
+                    const data = sessionStorage.getItem('contacts');
+                    return data ? JSON.parse(data) : [];
+                }
+                
+                function saveContacts(contacts) {
+                    sessionStorage.setItem('contacts', JSON.stringify(contacts));
+                }
+                
+                function showContacts() {
+                    const contacts = loadContacts();
+                    contactsDiv.innerHTML = '';
+                    
+                    if (contacts.length === 0) {
+                        contactsDiv.innerHTML = '<p>Контактов нет</p>';
+                        return;
+                    }
+                    
+                    contacts.forEach(contact => {
+                        const div = document.createElement('div');
+                        div.className = 'contact';
+                        div.innerHTML = `
+                            ${contact.name}: ${contact.phone}
+                            <button onclick="deleteContact(${contact.id})">X</button>
+                        `;
+                        contactsDiv.appendChild(div);
+                    });
+                }
+                
+                window.addContact = function() {
+                    const name = nameInput.value;
+                    const phone = phoneInput.value;
+                    
+                    if (!name || !phone) return;
+                    
+                    const contacts = loadContacts();
+                    contacts.push({
+                        id: Date.now(),
+                        name: name,
+                        phone: phone
+                    });
+                    
+                    saveContacts(contacts);
+                    showContacts();
+                    
+                    nameInput.value = '';
+                    phoneInput.value = '';
+                };
+                
+                window.deleteContact = function(id) {
+                    const contacts = loadContacts();
+                    const newContacts = contacts.filter(contact => contact.id !== id);
+                    saveContacts(newContacts);
+                    showContacts();
+                };
+                
+                showContacts();
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+            
+        })();
+    </script>
+</head>
+<body>
+    <h2>Телефонная книжка (sessionStorage)</h2>
+    
+      
+    <input type="text" id="name" placeholder="Имя">
+    <input type="text" id="phone" placeholder="Телефон">
+    <button onclick="addContact()">Добавить</button>
+    
+    <div id="contacts" style="margin-top: 20px;"></div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery События</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        button, a { display: block; margin: 10px 0; padding: 10px; }
+        p { padding: 10px; border: 1px solid #ccc; margin: 10px 0; }
+        .selectable { user-select: all; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initEvents() {
+                // Проверяем что jQuery загружен
+                if (typeof jQuery === 'undefined') {
+                    console.error('jQuery не загружен');
+                    return;
+                }
+
+                $(document).ready(function() {
+                    // 1. Клик по кнопке - зеленый текст 24px
+                    $('#button_1').on('click', function() {
+                        $('#block_1').css({
+                            'color': 'green',
+                            'font-size': '24px'
+                        });
+                    });
+
+                    // 2. Наведение на ссылку - оранжевый цвет
+                    $('#link_1').hover(
+                        // mouseenter
+                        function() {
+                            $(this).css('color', 'orange');
+                        },
+                        // mouseleave  
+                        function() {
+                            $(this).css('color', '');
+                        }
+                    );
+
+                    // 3. Выделение текста - красный 18px
+                    $('#selectable_text').on('select', function() {
+                        $(this).css({
+                            'color': 'red',
+                            'font-size': '18px'
+                        });
+                    });
+
+                    // Альтернатива для выделения текста (более надежная)
+                    $('#selectable_text').on('mouseup', function() {
+                        const selection = window.getSelection().toString();
+                        if (selection.length > 0) {
+                            $(this).css({
+                                'color': 'red',
+                                'font-size': '18px'
+                            });
+                        }
+                    });
+
+                    // 4. Двойной клик - жирный Verdana с рамкой
+                    $('#button_2').on('dblclick', function() {
+                        $('#block_2').css({
+                            'font-weight': 'bold',
+                            'font-family': 'Verdana',
+                            'border': '1px solid #000'
+                        });
+                    });
+                });
+            }
+
+            // Инициализация при загрузке DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initEvents);
+            } else {
+                initEvents();
+            }
+
+        })();
+    </script>
+</head>
+<body>
+    <h1>jQuery Обработка событий</h1>
+
+    <!-- 1. Одинарный клик -->
+    <button id="button_1">Кнопка 1 (одинарный клик)</button>
+    <p id="block_1">Абзац 1 - станет зеленым 24px при клике</p>
+
+    <!-- 2. Наведение на ссылку -->
+    <a href="#" id="link_1">Ссылка - станет оранжевой при наведении</a>
+
+    <!-- 3. Выделение текста -->
+    <p id="selectable_text" class="selectable">Текст для выделения - станет красным 18px при выделении</p>
+
+    <!-- 4. Двойной клик -->
+    <button id="button_2">Кнопка 2 (двойной клик)</button>
+    <p id="block_2">Абзац 2 - станет жирным Verdana с рамкой при двойном клике</p>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Workers Demo</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        button { padding: 10px; margin: 5px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #result { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .working { background: #fff8e1; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initWorker() {
+                const startBtn = document.getElementById('startBtn');
+                const stopBtn = document.getElementById('stopBtn');
+                const resultElement = document.getElementById('result');
+                
+                if (!startBtn || !stopBtn || !resultElement) {
+                    console.error('Не найдены элементы DOM');
+                    return;
+                }
+
+                let worker = null;
+
+                // Запуск Web Worker
+                function startWorker() {
+                    // Проверяем поддержку браузером
+                    if (typeof(Worker) === "undefined") {
+                        resultElement.textContent = "Web Workers не поддерживаются вашим браузером";
+                        return;
+                    }
+
+                    // Создаем Web Worker
+                    worker = new Worker("worker.js");
+
+                    // Обработчик сообщений от Worker
+                    worker.onmessage = function(event) {
+                        resultElement.textContent = event.data;
+                    };
+
+                    // Обработчик ошибок
+                    worker.onerror = function(error) {
+                        resultElement.textContent = "Ошибка: " + error.message;
+                    };
+
+                    resultElement.textContent = "Worker запущен...";
+                    resultElement.className = "working";
+                    
+                    // Запускаем вычисления в Worker
+                    worker.postMessage("start");
+                }
+
+                // Остановка Web Worker
+                function stopWorker() {
+                    if (worker) {
+                        worker.terminate();
+                        worker = null;
+                        resultElement.textContent = "Worker остановлен";
+                        resultElement.className = "";
+                    }
+                }
+
+                // Назначаем обработчики
+                startBtn.addEventListener('click', startWorker);
+                stopBtn.addEventListener('click', stopWorker);
+            }
+
+            // Инициализация при загрузке DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initWorker);
+            } else {
+                initWorker();
+            }
+
+        })();
+    </script>
+</head>
+<body>
+    <h1>Web Workers Demo</h1>
+    
+    <button id="startBtn">Запустить вычисления</button>
+    <button id="stopBtn">Остановить вычисления</button>
+    
+    <div id="result">Нажмите "Запустить вычисления"</div>
+    
+    <div style="margin-top: 20px; font-size: 12px; color: #666;">
+        <p>Web Worker выполняет тяжелые вычисления в фоновом потоке</p>
+        <p>Страница не блокируется и остается отзывчивой</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" manifest="app.manifest">
+<head>
+    <meta charset="UTF-8">
+    <title>Offline App</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .online { background: #e8f5e8; }
+        .offline { background: #ffebee; }
+        button { padding: 10px; margin: 5px; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initApp() {
+                const statusElement = document.getElementById('status');
+                const contentElement = document.getElementById('content');
+                
+                if (!statusElement || !contentElement) return;
+
+                function updateStatus() {
+                    if (navigator.onLine) {
+                        statusElement.textContent = '✅ Онлайн';
+                        statusElement.className = 'status online';
+                    } else {
+                        statusElement.textContent = '❌ Оффлайн';
+                        statusElement.className = 'status offline';
+                    }
+                }
+
+                function updateCache() {
+                    if (window.applicationCache) {
+                        window.applicationCache.update();
+                    }
+                }
+
+                window.updateCache = updateCache;
+                updateStatus();
+
+                window.addEventListener('online', updateStatus);
+                window.addEventListener('offline', updateStatus);
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initApp);
+            } else {
+                initApp();
+            }
+
+        })();
+    </script>
+</head>
+<body>
+    <h1>Offline App</h1>
+    
+    <div id="status" class="status">Проверка...</div>
+    
+    <div id="content">
+        <p>Это приложение работает оффлайн!</p>
+        <button onclick="updateCache()">Обновить кэш</button>
+    </div>
+</body>
+</html>

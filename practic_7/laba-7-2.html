@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chat</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        #status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .connected { background: #e8f5e8; }
+        .disconnected { background: #ffebee; }
+        #messages { height: 300px; border: 1px solid #ccc; padding: 10px; overflow-y: scroll; margin: 10px 0; }
+        input, button { padding: 10px; margin: 5px; }
+        button { background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initWebSocket() {
+                const statusElement = document.getElementById('status');
+                const messagesElement = document.getElementById('messages');
+                const messageInput = document.getElementById('messageInput');
+                const sendButton = document.getElementById('sendButton');
+                
+                if (!statusElement || !messagesElement || !messageInput || !sendButton) {
+                    console.error('Не найдены элементы DOM');
+                    return;
+                }
+
+                // WebSocket соединение (используем публичный тестовый сервер)
+                const socket = new WebSocket('wss://echo.websocket.org');
+
+                // Обработчик открытия соединения
+                socket.onopen = function() {
+                    statusElement.textContent = '✅ Подключено к серверу';
+                    statusElement.className = 'status connected';
+                };
+
+                // Обработчик получения сообщения
+                socket.onmessage = function(event) {
+                    const message = document.createElement('div');
+                    message.textContent = 'Сервер: ' + event.data;
+                    messagesElement.appendChild(message);
+                    messagesElement.scrollTop = messagesElement.scrollHeight;
+                };
+
+                // Обработчик ошибок
+                socket.onerror = function(error) {
+                    statusElement.textContent = '❌ Ошибка соединения';
+                    statusElement.className = 'status disconnected';
+                };
+
+                // Обработчик закрытия соединения
+                socket.onclose = function() {
+                    statusElement.textContent = '❌ Соединение закрыто';
+                    statusElement.className = 'status disconnected';
+                };
+
+                // Функция отправки сообщения
+                function sendMessage() {
+                    const message = messageInput.value.trim();
+                    if (message && socket.readyState === WebSocket.OPEN) {
+                        socket.send(message);
+                        
+                        const messageElement = document.createElement('div');
+                        messageElement.textContent = 'Вы: ' + message;
+                        messageElement.style.color = '#2196F3';
+                        messagesElement.appendChild(messageElement);
+                        messagesElement.scrollTop = messagesElement.scrollHeight;
+                        
+                        messageInput.value = '';
+                    }
+                }
+
+                // Обработчики событий
+                sendButton.addEventListener('click', sendMessage);
+                
+                messageInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+
+                // Очистка при закрытии страницы
+                window.addEventListener('beforeunload', function() {
+                    if (socket.readyState === WebSocket.OPEN) {
+                        socket.close();
+                    }
+                });
+            }
+
+            // Инициализация при загрузке DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initWebSocket);
+            } else {
+                initWebSocket();
+            }
+
+        })();
+    </script>
+</head>
+<body>
+    <h1>WebSocket Chat</h1>
+    
+    <div id="status" class="status">Подключаемся к серверу...</div>
+    
+    <div id="messages"></div>
+    
+    <div>
+        <input type="text" id="messageInput" placeholder="Введите сообщение..." style="width: 70%;">
+        <button id="sendButton">Отправить</button>
+    </div>
+    
+    <div style="margin-top: 20px; font-size: 12px; color: #666;">
+        <p>Используется тестовый WebSocket сервер: wss://echo.websocket.org</p>
+        <p>Сервер возвращает ваши сообщения обратно (эхо)</p>
+    </div>
+</body>
+</html>

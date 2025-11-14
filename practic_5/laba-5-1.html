@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма с HTML5 элементами</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .validation-icon {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .required-field .validation-icon.cross {
+            opacity: 1;
+            color: #e74c3c;
+        }
+        
+        .optional-field input:valid + .validation-icon.check {
+            opacity: 1;
+            color: #2ecc71;
+        }
+        
+        .required-field input:valid + .validation-icon.cross {
+            opacity: 0;
+        }
+        
+        .required-field input:valid ~ .validation-icon.check {
+            opacity: 1;
+            color: #2ecc71;
+        }
+        
+        .validation-icon.check {
+            right: 15px;
+            top: 42px;
+            color: #2ecc71;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .status-message {
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            font-weight: 500;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .form-footer span {
+            color: #e74c3c;
+        }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initModule() {
+                const form = document.getElementById('registrationForm');
+                const statusMessage = document.querySelector('.status-message');
+                
+                if (!form) {
+                    console.error('Форма не найдена');
+                    return;
+                }
+                
+                if (!statusMessage) {
+                    console.error('Элемент статуса не найден');
+                    return;
+                }
+
+                function handleFormSubmit(e) {
+                    e.preventDefault();
+                    
+                    const nameInput = document.getElementById('name');
+                    const emailInput = document.getElementById('email');
+                    
+                    if (!nameInput || !emailInput) {
+                        console.error('Обязательные поля не найдены');
+                        return;
+                    }
+                    
+                    const name = nameInput.value;
+                    const email = emailInput.value;
+                    
+                    if (name && email) {
+                        alert('Форма успешно отправлена!');
+                    } else {
+                        alert('Пожалуйста, заполните все обязательные поля');
+                    }
+                }
+
+                function checkFormValidity() {
+                    const inputs = document.querySelectorAll('input[required]');
+                    
+                    if (inputs.length === 0) {
+                        console.error('Обязательные поля не найдены');
+                        return;
+                    }
+                    
+                    const allRequiredFilled = Array.from(inputs).every(input => {
+                        return input.value.trim() !== '';
+                    });
+                    
+                    if (allRequiredFilled) {
+                        statusMessage.textContent = 'Все обязательные поля заполнены!';
+                        statusMessage.style.background = '#d4edda';
+                        statusMessage.style.color = '#155724';
+                        statusMessage.style.border = '1px solid #c3e6cb';
+                    } else {
+                        statusMessage.textContent = 'Пожалуйста, заполните обязательные поля';
+                        statusMessage.style.background = '#fff3cd';
+                        statusMessage.style.color = '#856404';
+                        statusMessage.style.border = '1px solid #ffeaa7';
+                    }
+                }
+
+                function setupEventListeners() {
+                    form.addEventListener('submit', handleFormSubmit);
+                    
+                    const requiredInputs = document.querySelectorAll('input[required]');
+                    if (requiredInputs.length > 0) {
+                        requiredInputs.forEach(input => {
+                            input.addEventListener('input', checkFormValidity);
+                        });
+                    }
+                }
+
+                setupEventListeners();
+                checkFormValidity();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initModule);
+            } else {
+                initModule();
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Регистрация</h1>
+        <p class="subtitle">Заполните форму ниже</p>
+        
+        <div class="status-message">
+            Пожалуйста, заполните обязательные поля
+        </div>
+        
+        <form id="registrationForm">
+            <!-- Обязательное поле: Имя -->
+            <div class="form-group required-field">
+                <label for="name" class="required">Имя</label>
+                <input type="text" id="name" name="name" required>
+                <span class="validation-icon cross">✕</span>
+                <span class="validation-icon check">✓</span>
+            </div>
+            
+            <!-- Необязательное поле: Возраст -->
+            <div class="form-group optional-field">
+                <label for="age">Возраст</label>
+                <input type="number" id="age" name="age" min="1" max="120" value="25">
+                <span class="validation-icon check">✓</span>
+            </div>
+            
+            <!-- Обязательное поле: Email -->
+            <div class="form-group required-field">
+                <label for="email" class="required">Email</label>
+                <input type="email" id="email" name="email" required>
+                <span class="validation-icon cross">✕</span>
+                <span class="validation-icon check">✓</span>
+            </div>
+            
+            <!-- Необязательное поле: Сайт -->
+            <div class="form-group optional-field">
+                <label for="website">Сайт</label>
+                <input type="url" id="website" name="website" placeholder="https://example.com">
+                <span class="validation-icon check">✓</span>
+            </div>
+            
+            <button type="submit">Отправить</button>
+        </form>
+        
+        <div class="form-footer">
+            Поля отмеченные <span>*</span> обязательны для заполнения
+        </div>
+    </div>
+</body>
+</html>

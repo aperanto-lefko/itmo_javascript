@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Селекторы</title>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        div { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>jQuery Селекторы</h1>
+
+  
+    <div id="meadow">#meadow - div с id=meadow</div>
+    
+    <div class="rainbow">.rainbow - div с class=rainbow</div>
+    
+    <div id="fut">
+        #fut - родительский div
+        <div id="future">#future - div внутри #fut</div>
+    </div>
+    
+    <div set="value">[set] - div с атрибутом set</div>
+    
+    <div last="code">[last=code] - div с атрибутом last=code</div>
+
+    <script>
+        // Ждем загрузки DOM
+        $(document).ready(function() {
+            // 1. div с id=meadow - красный, 12pt
+            $('#meadow').css({
+                'color': 'red',
+                'font-size': '12pt'
+            });
+
+            // 2. div с class=rainbow - красный, 12pt
+            $('.rainbow').css({
+                'color': 'red', 
+                'font-size': '12pt'
+            });
+
+            // 3. div с id=future внутри div с id=fut - синий, 12pt
+            $('#fut #future').css({
+                'color': 'blue',
+                'font-size': '12pt'
+            });
+
+            // 4. Элемент с атрибутом set - красный, 12pt
+            $('[set]').css({
+                'color': 'red',
+                'font-size': '12pt'
+            });
+
+            // 5. Элемент с атрибутом last=code - красный, 12pt
+            $('[last="code"]').css({
+                'color': 'red',
+                'font-size': '12pt'
+            });
+        });
+    </script>
+</body>
+</html>

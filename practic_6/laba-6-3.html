@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Geolocation Demo</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; padding: 20px; }
+        .info { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .button { padding: 10px 15px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .error { background: #ffebee; color: #c62828; padding: 10px; border-radius: 5px; }
+        .success { background: #e8f5e8; color: #2e7d32; padding: 10px; border-radius: 5px; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initGeolocation() {
+                // Получаем элементы DOM и проверяем их существование
+                const statusElement = document.getElementById('status');
+                const resultElement = document.getElementById('result');
+                const buttonElement = document.getElementById('getLocationBtn');
+                
+                // Проверка на null
+                if (!statusElement || !resultElement || !buttonElement) {
+                    console.error('Не найдены необходимые элементы DOM');
+                    return;
+                }
+
+                // Функция получения местоположения
+                function getLocation() {
+                    // Проверяем поддержку Geolocation API
+                    if (!navigator.geolocation) {
+                        statusElement.textContent = 'Geolocation не поддерживается вашим браузером';
+                        resultElement.innerHTML = '<div class="error">Ваш браузер не поддерживает определение местоположения</div>';
+                        return;
+                    }
+                    
+                    statusElement.textContent = 'Определяем местоположение...';
+                    
+                    // Получаем текущее местоположение
+                    navigator.geolocation.getCurrentPosition(
+                        // Успешное получение координат
+                        function(position) {
+                            statusElement.textContent = 'Местоположение определено!';
+                            
+                            // Получаем данные из объекта Position
+                            const coords = position.coords;
+                            const timestamp = new Date(position.timestamp).toLocaleString();
+                            
+                            resultElement.innerHTML = `
+                                <div class="success">
+                                    <h3>Ваши координаты:</h3>
+                                    <p><strong>Широта:</strong> ${coords.latitude}</p>
+                                    <p><strong>Долгота:</strong> ${coords.longitude}</p>
+                                    <p><strong>Точность:</strong> ${coords.accuracy} метров</p>
+                                    <p><strong>Высота:</strong> ${coords.altitude || 'не доступно'}</p>
+                                    <p><strong>Скорость:</strong> ${coords.speed || 'не доступно'} м/с</p>
+                                    <p><strong>Время получения:</strong> ${timestamp}</p>
+                                </div>
+                            `;
+                        },
+                        
+                        // Обработка ошибок
+                        function(error) {
+                            let errorMessage = 'Неизвестная ошибка';
+                            
+                            switch(error.code) {
+                                case error.PERMISSION_DENIED:
+                                    errorMessage = 'Доступ к геолокации запрещен пользователем';
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    errorMessage = 'Информация о местоположении недоступна';
+                                    break;
+                                case error.TIMEOUT:
+                                    errorMessage = 'Время ожидания определения местоположения истекло';
+                                    break;
+                            }
+                            
+                            statusElement.textContent = 'Ошибка определения местоположения';
+                            resultElement.innerHTML = `<div class="error">${errorMessage}</div>`;
+                        },
+                        
+                        // Опции
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 60000
+                        }
+                    );
+                }
+
+                // Назначаем обработчик на кнопку
+                buttonElement.addEventListener('click', getLocation);
+            }
+
+            // Инициализируем когда DOM загружен
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initGeolocation);
+            } else {
+                initGeolocation();
+            }
+
+        })();
+    </script>
+</head>
+<body>
+    <h1>Определение местоположения</h1>
+    
+    <div class="info">
+        <strong>Статус:</strong> <span id="status">Нажмите кнопку для определения местоположения</span>
+    </div>
+
+    <button class="button" id="getLocationBtn">Определить местоположение</button>
+
+    <div id="result"></div>
+</body>
+</html>

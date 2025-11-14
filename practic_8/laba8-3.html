@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Анимации</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 20px auto; padding: 20px; }
+        button { display: block; margin: 10px 0; padding: 10px; }
+        .block { padding: 20px; margin: 10px 0; border: 2px solid #333; background: #f0f0f0; }
+        #block_3 { height: 100px; overflow: hidden; }
+        #animatedSquare { width: 50px; height: 50px; background: red; position: absolute; }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            function initAnimations() {
+                if (typeof jQuery === 'undefined') {
+                    console.error('jQuery не загружен');
+                    return;
+                }
+
+                $(document).ready(function() {
+                    // 1. Скрыть/показать блок
+                    $('#button_1').on('click', function() {
+                        $('#block_1').hide();
+                    });
+                    
+                    $('#button_2').on('click', function() {
+                        $('#block_1').show();
+                    });
+
+                    // 2. Прозрачность при наведении
+                    $('#block_2').hover(
+                        function() {
+                            $(this).animate({ opacity: 0.3 }, 3000);
+                        },
+                        function() {
+                            $(this).animate({ opacity: 1 }, 1000);
+                        }
+                    );
+
+                    // 3. Анимация высоты
+                    $('#button_3').on('click', function() {
+                        $('#block_3').animate({ height: '0px' }, 5000);
+                    });
+                    
+                    $('#button_4').on('click', function() {
+                        $('#block_3').animate({ height: '100px' }, 7000);
+                    });
+
+                    // 4. Перемещение квадрата по углам
+                    $('#button_5').on('click', function() {
+                        const square = $('#animatedSquare');
+                        const windowWidth = $(window).width() - 60;
+                        const windowHeight = $(window).height() - 60;
+                        
+                        square.animate({ left: '0px', top: '0px' }, 1000)
+                              .animate({ left: windowWidth + 'px', top: '0px' }, 1000)
+                              .animate({ left: windowWidth + 'px', top: windowHeight + 'px' }, 1000)
+                              .animate({ left: '0px', top: windowHeight + 'px' }, 1000)
+                              .animate({ left: '0px', top: '0px' }, 1000);
+                    });
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAnimations);
+            } else {
+                initAnimations();
+            }
+
+        })();
+    </script>
+</head>
+<body>
+    <h1>jQuery Анимации и Эффекты</h1>
+
+    <!-- 1. Скрыть/показать -->
+    <button id="button_1">Скрыть блок 1</button>
+    <button id="button_2">Показать блок 1</button>
+    <div id="block_1" class="block">Блок 1 - будет скрываться и появляться</div>
+
+    <!-- 2. Прозрачность -->
+    <div id="block_2" class="block">Блок 2 - станет прозрачным при наведении на 3 секунды</div>
+
+    <!-- 3. Анимация высоты -->
+    <button id="button_3">Уменьшить высоту блока 3 (5 сек)</button>
+    <button id="button_4">Восстановить высоту блока 3 (7 сек)</button>
+    <div id="block_3" class="block">Блок 3 - будет изменять высоту</div>
+
+    <!-- 4. Анимация перемещения -->
+    <button id="button_5">Запустить анимацию квадрата</button>
+    <div id="animatedSquare"></div>
+
+    <div style="margin-top: 20px; color: #666;">
+        <p><strong>Инструкция:</strong></p>
+        <p>• Кнопки 1-2: скрыть/показать блок</p>
+        <p>• Наведите на блок 2: плавная прозрачность</p>
+        <p>• Кнопки 3-4: анимация высоты</p>
+        <p>• Кнопка 5: перемещение красного квадрата по углам</p>
+    </div>
+</body>
+</html>
